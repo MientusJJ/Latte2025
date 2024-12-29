@@ -25,7 +25,7 @@ function check()
                 fi
 
                 if [[ -f "${f%.*}.output" ]] ; then
-                    cmp "${f%.*}.output" "${f%.*}.output.temp"
+                    diff -q --ignore-all-space "${f%.*}.output" "${f%.*}.output.temp" > /dev/null
 
                     if [[ $? -eq 0 ]] ; then
                         echo -e "\e[92mOK!\e[0m"

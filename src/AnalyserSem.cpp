@@ -187,9 +187,9 @@ void AnalyserSem::visitAss(Ass *p)
   p->expr_1->accept(this);
   p->expr_2->accept(this);
 
-  if(p->expr_2->type_ != p->expr_1->type_ && (!InformationSaver::GetInstance().classPar(p->expr_1->type_,p->expr_2->type_)))
+  if(p->expr_2->type_ != p->expr_1->type_ && (!InformationSaver::GetInstance().classPar(p->expr_1->type_,p->expr_2->type_)) && p->expr_1->is_lvalue_)
   {
-      std::string str = "Type: " + (p->expr_1->type_.size() ?  p->expr_1->type_ : "undefined" ) + " doesn't match type: " + (p->expr_2->type_.empty() ?  p->expr_2->type_ :  "undefined") ;
+      std::string str = "Type: " + (p->expr_1->type_.size() ?  p->expr_1->type_ : "undefined" ) + " doesn't match type: " +  p->expr_2->type_ ;
       FileSaver::GetInstance().addError(str,p->expr_1->line);
   }
   if (!p->expr_1->is_lvalue_)
@@ -1035,10 +1035,13 @@ void AnalyserSem::visitEMul(EMul *p)
   }
   else if(divFlag != nullptr && p->has_value_)
   {
+      cout << "Tutaj72" << endl;
+      cout << p->expr_2->value_ << endl;
       if(!p->expr_2->value_)
       {
           std::string str = "Divison by 0 is not allowed";
           FileSaver::GetInstance().addError(str,p->expr_1->line );
+          return;
       }
       p->value_ = p->expr_1->value_ / p->expr_2->value_;
   }
@@ -1069,7 +1072,7 @@ void AnalyserSem::visitEAdd(EAdd *p)
         }
         else
         {
-            std::string str  = "Expressions should be of type string or int, if we use 'sub' operator";
+            std::string str  = "Expressions should be of type int, if we use 'sub' operator";
             FileSaver::GetInstance().addError(str,p->expr_1->line);
         }
   }
@@ -1102,7 +1105,6 @@ void AnalyserSem::visitERel(ERel *p)
   auto leFlag = dynamic_cast<LE*>(p->relop_);
   auto gtFlag = dynamic_cast<GTH*>(p->relop_);
   auto geFlag = dynamic_cast<GE*>(p->relop_);
-
   bool check = false;
   p->is_always_false_ = false;
   p->is_always_true_ = false;
@@ -1149,7 +1151,6 @@ void AnalyserSem::visitERel(ERel *p)
       else if (p->expr_1->type_ == Helper::boolName && p->expr_2->type_ == Helper::boolName)
       {
           check = true;
-
           if (eqFlag != nullptr)
           {
               if ((p->expr_1->is_always_true_ && p->expr_2->is_always_true_) || (p->expr_1->is_always_false_ && p->expr_2->is_always_false_))
@@ -1184,7 +1185,7 @@ void AnalyserSem::visitERel(ERel *p)
       }
       if(!check)
       {
-          std::string str = "Either expression shouldn't be type of void or use expression to check if class is null";
+          std::string str = "Expressions should be the same type, if we compare them, but they are: " + p->expr_1->type_ + " and " + p->expr_2->type_;
           FileSaver::GetInstance().addError(str,p->expr_1->line);
       }
   }
