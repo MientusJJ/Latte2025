@@ -996,6 +996,47 @@ SExp *SExp::clone() const
 {
   return new SExp(*this);
 }
+/********************   SExpParen    ********************/
+SExpParen::SExpParen(Expr *p1)
+{
+    expr_ = p1;
+
+}
+
+SExpParen::SExpParen(const SExpParen & other)
+{
+    expr_ = other.expr_->clone();
+
+}
+
+SExpParen &SExpParen::operator=(const SExpParen & other)
+{
+    SExpParen tmp(other);
+    swap(tmp);
+    return *this;
+}
+
+void SExpParen::swap(SExpParen & other)
+{
+    std::swap(expr_, other.expr_);
+
+}
+
+SExpParen::~SExpParen()
+{
+    delete(expr_);
+
+}
+
+void SExpParen::accept(Visitor *v)
+{
+    v->visitSExpParen(this);
+}
+
+SExpParen *SExpParen::clone() const
+{
+    return new SExpParen(*this);
+}
 
 
 
@@ -1928,49 +1969,6 @@ EClsApp *EClsApp::clone() const
 {
   return new EClsApp(*this);
 }
-/********************   EParen    ********************/
-EParen::EParen(Expr *p1)
-{
-    expr_ = p1;
-
-}
-
-EParen::EParen(const EParen & other)
-{
-    expr_ = other.expr_->clone();
-
-}
-
-EParen &EParen::operator=(const EParen & other)
-{
-    EParen tmp(other);
-    swap(tmp);
-    return *this;
-}
-
-void EParen::swap(EParen & other)
-{
-    std::swap(expr_, other.expr_);
-
-}
-
-EParen::~EParen()
-{
-    delete(expr_);
-
-}
-
-void EParen::accept(Visitor *v)
-{
-    v->visitEParen(this);
-}
-
-EParen *EParen::clone() const
-{
-    return new EParen(*this);
-}
-
-
 
 
 /********************   ENeg    ********************/

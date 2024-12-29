@@ -16,10 +16,10 @@ public:
   void visitBlock(Block *p);
   void visitStmt(Stmt *p);
   void visitItem(Item *p);
+  void visitSExpParen(SExpParen *p);
   void visitSimpleType(SimpleType *p);
   void visitType(Type *p);
   void visitExpr(Expr *p);
-  void visitEParen(EParen *e_paren);
   void visitAddOp(AddOp *p);
   void visitMulOp(MulOp *p);
   void visitRelOp(RelOp *p);

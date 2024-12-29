@@ -65,6 +65,7 @@ While.     Stmt ::= "while" "(" Expr ")" Stmt ;
 ForEach.   Stmt ::= "for" "(" Type Ident ":" Expr ")" Stmt ;
 
 SExp.      Stmt ::= Expr  ";" ;
+SExpParen. Stmt ::= "(" Expr ")" ";";
 
 -- Types ---------------------------------------------------
 

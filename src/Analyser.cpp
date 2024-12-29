@@ -52,12 +52,11 @@ void Analyser::visitClsDef(ClsDef *p)
   }
 
 }
-void Analyser::visitEParen(EParen *e_paren)
+void Analyser::visitSExpParen(SExpParen *s_exp_paren)
 {
-    /* Code For EParen Goes Here */
-    /* Code For EParen Goes Here */
+    /* Code For SExpParen Goes Here */
 
-    e_paren->expr_->accept(this);
+    s_exp_paren->expr_->accept(this);
 
 }
 void Analyser::visitInhClsDef(InhClsDef *p)

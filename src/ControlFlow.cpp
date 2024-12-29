@@ -4,6 +4,9 @@
 
 #include <stdexcept>
 #include "ControlFlow.h"
+#include "FileSaver.h"
+#include <iostream>
+using namespace std;
 ControlFlow::ControlFlow() : termWhileBlk(false) {}
 bool ControlFlow::FlowExists()
 {
@@ -14,9 +17,9 @@ bool ControlFlow::FlowExists()
         {
             if(retTVec[i] != Helper::voidName && simpleBlkVec[i][j].size() == 0 && !termVec[i][j] && reachVec[i][j])
             {
-                std::string str = "\"" + funcNameVec[i].first + "\"" + " (line " + std::to_string(funcNameVec[i].second) + ")" +
-                        " doesn't  have return statement in every path";
-                throw std::invalid_argument(str);
+                std::string str = "\"" + funcNameVec[i].first + "\"" +
+                        " doesn't have return statement in every path";
+                FileSaver::GetInstance().addError(str,funcNameVec[i].second );
             }
         }
     }

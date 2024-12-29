@@ -52,21 +52,19 @@ int main(int argc,char ** argv) {
         delete FaC;
         try
         {
-            if(InformationSaver::GetInstance().InheritanceCorrectLoops() && InformationSaver::GetInstance().checkMain())
+            InformationSaver::GetInstance().InheritanceCorrectLoops();
+            InformationSaver::GetInstance().checkMain();
+            if(FileSaver::GetInstance().printAllErrors())
             {
-                Analyser *analys = new Analyser;
-                analys->visitProgram(progInput);
-                delete analys;
-                if(FileSaver::GetInstance().printAllErrors())
-                {
-                    return MAIN_ERROR;
-                }
-                InformationSaver::GetInstance().newClassPars();
-                AnalyserSem *analSem = new AnalyserSem;
-                analSem->visitProgram(progInput);
-                delete analSem;
-
+                return Numbers::MAIN_ERROR;
             }
+            Analyser *analys = new Analyser;
+            analys->visitProgram(progInput);
+            delete analys;
+            InformationSaver::GetInstance().newClassPars();
+            AnalyserSem *analSem = new AnalyserSem;
+            analSem->visitProgram(progInput);
+            delete analSem;
             ControlFlow::getInstance().FlowExists();
         }
         catch(std::invalid_argument &e)

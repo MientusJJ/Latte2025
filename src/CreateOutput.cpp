@@ -51,13 +51,14 @@ void CreateOutput::visitFnDef(FnDef *p)
        FileSaver::GetInstance().OneLine("  leave\n" "  ret\n");
     }
 }
-void CreateOutput::visitEParen(EParen *e_paren)
+void CreateOutput::visitSExpParen(SExpParen *s_exp_paren)
 {
-    /* Code For EParen Goes Here */
+    /* Code For SExpParen Goes Here */
 
-    e_paren->expr_->accept(this);
+    s_exp_paren->expr_->accept(this);
 
 }
+
 void CreateOutput::visitClsDef(ClsDef *cls_def)
 {
     cls_def->listclsfld_->accept(this);

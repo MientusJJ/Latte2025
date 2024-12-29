@@ -17,11 +17,11 @@ public:
   void visitTopDef(TopDef *p);
   void visitClsFld(ClsFld *p);
   void visitArg(Arg *p);
-  void visitEParen(EParen *e_paren);
   void visitBlock(Block *p);
   void visitStmt(Stmt *p);
   void visitItem(Item *p);
   void visitSimpleType(SimpleType *p);
+  void visitSExpParen(SExpParen *p);
   void visitType(Type *p);
   void visitExpr(Expr *p);
   void visitAddOp(AddOp *p);

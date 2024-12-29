@@ -55,6 +55,7 @@ class CondElse;
 class While;
 class ForEach;
 class SExp;
+class SExpParen;
 class Int;
 class Str;
 class Bool;
@@ -74,7 +75,6 @@ class ELitFalse;
 class ELitNull;
 class EApp;
 class EClsApp;
-class EParen;
 class ENeg;
 class ENot;
 class EVarNew;
@@ -126,7 +126,7 @@ public:
     virtual void visitSimpleType(SimpleType *p)  {};
     virtual void visitType(Type *p)  {};
     virtual void visitExpr(Expr *p)  {};
-    virtual void visitEParen(EParen *p) {};
+    virtual void visitSExpParen(SExpParen *p) {};
     virtual void visitAddOp(AddOp *p)  {};
     virtual void visitMulOp(MulOp *p)  {};
     virtual void visitRelOp(RelOp *p)  {};
@@ -460,7 +460,19 @@ public:
   virtual Blk *clone() const;
   void swap(Blk &);
 };
+class SExpParen : public Stmt
+{
+public:
+    Expr *expr_;
 
+    SExpParen(const SExpParen &);
+    SExpParen &operator=(const SExpParen &);
+    SExpParen(Expr *p1);
+    ~SExpParen();
+    virtual void accept(Visitor *v);
+    virtual SExpParen *clone() const;
+    void swap(SExpParen &);
+};
 class Empty : public Stmt
 {
 public:
@@ -957,19 +969,7 @@ public:
   virtual EClsApp *clone() const;
   void swap(EClsApp &);
 };
-class EParen : public Expr
-{
-public:
-    Expr *expr_;
 
-    EParen(const EParen &);
-    EParen &operator=(const EParen &);
-    EParen(Expr *p1);
-    ~EParen();
-    virtual void accept(Visitor *v);
-    virtual EParen *clone() const;
-    void swap(EParen &);
-};
 class ENeg : public Expr
 {
 public:

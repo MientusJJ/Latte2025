@@ -94,14 +94,13 @@ void AnalyserSem::visitMetDef(MetDef *p)
   p->owner_ = className;
   InformationSaver::GetInstance().BlkExit();
 }
-void AnalyserSem::visitEParen(EParen *e_paren)
+void AnalyserSem::visitSExpParen(SExpParen *s_exp_paren)
 {
-    /* Code For EParen Goes Here */
-    cout << "Tutaj9" << endl;
-    e_paren->expr_->accept(this);
+    /* Code For SExpParen Goes Here */
+
+    s_exp_paren->expr_->accept(this);
 
 }
-
 void AnalyserSem::visitAr(Ar *p)
 {
   /* Code For Ar Goes Here */
@@ -276,6 +275,7 @@ void AnalyserSem::visitCond(Cond *p)
       std::cout << "TUTAJ2" << std::endl;
       InformationSaver::GetInstance().BlkEntry();
       auto par = ControlFlow::getInstance().getCurrBlk();
+
       ControlFlow::getInstance().newBlk();
       auto ifBlk = ControlFlow::getInstance().getCurrBlk();
       ControlFlow::getInstance().addNewNode(par,ifBlk);
@@ -314,15 +314,20 @@ void AnalyserSem::visitCondElse(CondElse *p)
         auto par = ControlFlow::getInstance().getCurrBlk();
         ControlFlow::getInstance().newBlk();
         auto ifBlk = ControlFlow::getInstance().getCurrBlk();
+        cout << "par,ifBlok: " <<  par << " " << ifBlk << endl;
         ControlFlow::getInstance().addNewNode(par,ifBlk);
         p->stmt_1->accept(this);
         auto ifPar = ControlFlow::getInstance().getCurrBlk();
         ControlFlow::getInstance().newBlk();
         auto elseBlock = ControlFlow::getInstance().getCurrBlk();
         ControlFlow::getInstance().addNewNode(par,elseBlock);
+        cout << "par,elseBlock: " <<  par << " " << ifBlk << endl;
         p->stmt_2->accept(this);
         auto elsePar = ControlFlow::getInstance().getCurrBlk();
         ControlFlow::getInstance().newVirtBlock(elsePar,ifPar);
+        auto ifAfter = ControlFlow::getInstance().getCurrBlk();
+        ControlFlow::getInstance().addNewNode(par,ifAfter);
+        ControlFlow::getInstance().addNewNode(ifPar,ifAfter);
     }
     else if (p->expr_->is_always_true_)
     {

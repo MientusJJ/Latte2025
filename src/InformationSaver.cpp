@@ -4,6 +4,9 @@
 
 #include <stdexcept>
 #include "InformationSaver.h"
+#include "FileSaver.h"
+#include <iostream>
+using namespace std;
 InformationSaver::InformationSaver(): _indx(0)
 {
     _voidT = new SimpleVarType(new Void);
@@ -101,14 +104,14 @@ bool InformationSaver::InheritanceCorrectLoops()
         else if(std::get<0>(it->second) != "")
         {
             std::string str = "\"" + it->first + "\"" + " doesn't have good defined ancestor class";
-            throw std::invalid_argument(str.c_str());
+            FileSaver::GetInstance().addError(str,0);
         }
         std::vector<bool> vis(classesMap.size(),false);
         std::vector<bool> loop(classesMap.size(),false);
         for(int i = 0; i < classesMap.size();i++) {
             if (checkSingleLoop(i, inher, vis, loop)) {
                 std::string str = "Cycles in inheritance of classes";
-                throw std::invalid_argument(str.c_str());
+                FileSaver::GetInstance().addError(str,0);
             }
         }
     }
@@ -143,18 +146,21 @@ bool InformationSaver::checkMain()
     auto it = functionsMap.find("main");
     if(it == functionsMap.end())
     {
+
         std::string str = "Main not found";
-        throw std::invalid_argument(str.c_str());
+        FileSaver::GetInstance().addError(str,0);
     }
     if(std::get<0>(it->second)->get() != Helper::intName)
     {
+
         std::string str = "Main has to return int.";
-        throw std::invalid_argument(str.c_str());
+        FileSaver::GetInstance().addError(str,0);
     }
     if(!std::get<1>(it->second)->getTypes().empty())
     {
+
         std::string str = "Main can't take arguments.";
-        throw std::invalid_argument(str.c_str());
+        FileSaver::GetInstance().addError(str,0);
     }
     return true;
 }

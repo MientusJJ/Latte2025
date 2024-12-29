@@ -19,7 +19,7 @@ public:
     void visitClsFld(ClsFld *p);
     void visitArg(Arg *p);
     void visitBlock(Block *p);
-    void visitEParen(EParen *e_paren);
+    void visitSExpParen(SExpParen *p);
     void visitStmt(Stmt *p);
     void visitItem(Item *p);
     void visitSimpleType(SimpleType *p);
