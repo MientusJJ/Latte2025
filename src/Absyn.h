@@ -301,9 +301,10 @@ public:
 class Expr : public Visitable
 {
 public:
-    Expr() : is_lvalue_(false), is_always_false_(false), is_always_true_(false),
+    Expr() : ident_(""),is_lvalue_(false), is_always_false_(false), is_always_true_(false),
              has_value_(false), is_null_(false) {}
   virtual Expr *clone() const = 0;
+    Ident ident_;
     std::string type_;
     bool is_lvalue_;
     bool is_always_false_, is_always_true_;
@@ -828,7 +829,6 @@ public:
 class EVar : public Expr
 {
 public:
-  Ident ident_;
   int index_;
   std::string function_name_;
   bool is_reference_;
@@ -846,7 +846,6 @@ class EClsVar : public Expr
 {
 public:
   Expr *expr_;
-  Ident ident_;
 
   EClsVar(const EClsVar &);
   EClsVar &operator=(const EClsVar &);
@@ -942,7 +941,6 @@ public:
 class EApp : public Expr
 {
 public:
-  Ident ident_;
   ListExpr *listexpr_;
 
   EApp(const EApp &);
@@ -958,7 +956,7 @@ class EClsApp : public Expr
 {
 public:
   Expr *expr_;
-  Ident ident_;
+
   ListExpr *listexpr_;
   std::string owner_;
   EClsApp(const EClsApp &);
@@ -1001,7 +999,6 @@ public:
 class EVarNew : public Expr
 {
 public:
-  Ident ident_;
 
   EVarNew(const EVarNew &);
   EVarNew &operator=(const EVarNew &);
@@ -1029,7 +1026,6 @@ public:
 class EArrNew : public Expr
 {
 public:
-  Ident ident_;
   Expr *expr_;
 
   EArrNew(const EArrNew &);
@@ -1059,7 +1055,6 @@ public:
 class EVarCast : public Expr
 {
 public:
-  Ident ident_;
   Expr *expr_;
 
   EVarCast(const EVarCast &);
@@ -1089,7 +1084,6 @@ public:
 class EArrCast : public Expr
 {
 public:
-  Ident ident_;
   Expr *expr_;
 
   EArrCast(const EArrCast &);

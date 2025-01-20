@@ -619,6 +619,7 @@ void AnalyserSem::visitEClsVar(EClsVar *p)
   /* Code For EClsVar Goes Here */
     cout << "Tutaj32" << endl;
   p->expr_->accept(this);
+
   if (p->expr_->type_.length() > 2 && p->expr_->type_.substr(p->expr_->type_.length() - 2) == Helper::tableName)
   {
       if (p->ident_ != Helper::lengthName)
