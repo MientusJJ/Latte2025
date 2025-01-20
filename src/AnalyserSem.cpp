@@ -766,7 +766,7 @@ void AnalyserSem::visitEApp(EApp *p)
         std::string str = p->ident_ + " function needs " + std::to_string(ar->size() ) + " arguments, but it gets " + std::to_string(p->listexpr_->size());
         FileSaver::GetInstance().addError(str,p->listexpr_->line );
     }
-    for(int i = 0; i < ar->size(); i++)
+    for(int i = 0; i < min(ar->size(),p->listexpr_->size()); i++)
     {
 
         if(p->listexpr_->at(i)->type_ != ar->at(i)->getType() && !InformationSaver::GetInstance().classPar(ar->at(i)->getType(),p->listexpr_->at(i)->type_))
@@ -812,7 +812,8 @@ void AnalyserSem::visitEClsApp(EClsApp *p)
       FileSaver::GetInstance().addError(str,p->listexpr_->line );
 
   }
-  for(int i = 1; i < ar->size(); i++)
+
+  for(int i = 1; i < min(ar->size(),p->listexpr_->size()+1); i++)
   {
       if(p->listexpr_->at(i-1)->type_ != ar->at(i)->getType() && !InformationSaver::GetInstance().classPar(ar->at(i)->getType(),p->listexpr_->at(i-1)->type_))
       {
@@ -1110,17 +1111,18 @@ void AnalyserSem::visitERel(ERel *p)
   p->is_always_true_ = false;
   if(eqFlag != nullptr || neqFlag != nullptr)
   {
-      if(p->expr_1->type_ == p->expr_2->type_ && (p->expr_1->is_null_ || p->expr_2->is_null_))
+    cout << p->expr_1->type_ << " " << p->expr_2->type_ << endl;
+    if(p->expr_1->type_ == p->expr_2->type_ && (p->expr_1->is_null_ || p->expr_2->is_null_))
       {
           check = true;
       }
       if (p->expr_1->type_ == Helper::intName &&p->expr_2->type_ == Helper::intName)
       {
-          check = true;
-
+		  check = true;
           if (p->expr_1->has_value_ && p->expr_2->has_value_)
           {
-              if (eqFlag != nullptr)
+
+            if (eqFlag != nullptr)
               {
                   if (p->expr_1->value_ == p->expr_2->value_)
                   {
@@ -1183,6 +1185,10 @@ void AnalyserSem::visitERel(ERel *p)
       {
           check = true;
       }
+      else if (p->expr_1->type_ == p->expr_2->type_)
+        {
+        	check = true;
+        }
       if(!check)
       {
           std::string str = "Expressions should be the same type, if we compare them, but they are: " + p->expr_1->type_ + " and " + p->expr_2->type_;
@@ -1194,7 +1200,8 @@ void AnalyserSem::visitERel(ERel *p)
       check = true;
       if(p->expr_1->has_value_ && p->expr_2->has_value_)
       {
-          if(ltFlag != nullptr)
+        //cout <<  p->expr_1->value_ << " "
+        if(ltFlag != nullptr)
           {
               if (p->expr_1->value_ < p->expr_2->value_)
               {
@@ -1222,7 +1229,8 @@ void AnalyserSem::visitERel(ERel *p)
           }
           else if (gtFlag != nullptr)
           {
-              if (p->expr_1->value_ > p->expr_2->value_)
+            cout << "TUTAJ XD" << endl;
+            if (p->expr_1->value_ > p->expr_2->value_)
               {
                   p->is_always_false_ = false;
                   p->is_always_true_ = true;

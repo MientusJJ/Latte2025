@@ -149,6 +149,7 @@ bool InformationSaver::checkMain()
 
         std::string str = "Main not found";
         FileSaver::GetInstance().addError(str,0);
+        return false;
     }
     if(std::get<0>(it->second)->get() != Helper::intName)
     {
