@@ -71,6 +71,22 @@ void InformationSaver::lib()
     newFunc(Helper::libValues[3],_intT,_emptyListAr);
     newFunc(Helper::libValues[4],_stringT,_emptyListAr);
 }
+void InformationSaver::newClassNulls()
+{
+  classParentsMap.insert(std::make_pair(Helper::nullName,std::set<std::string>{}));
+     for(auto it : classesMap)
+     {
+        classParentsMap[Helper::nullName].insert(it.first);
+     }
+     for(auto it : classParentsMap)
+     {
+       for ( auto it2 : it.second)
+         {
+            cout << it.first << " " << it2 << endl;
+         }
+     }
+
+}
 bool InformationSaver::classPar(const std::string & par,const std::string & idx)
 {
     if(classParentsMap.contains(idx))

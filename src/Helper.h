@@ -22,6 +22,7 @@ using symbolTab = std::unordered_map<std::string, std::tuple<std::string, int, b
 namespace Helper {
     const std::vector<std::string> libValues{"printInt", "printString", "error", "readInt", "readString"};
     const std::string voidName = "void";
+    const std::string nullName = "null";
     const std::string intName = "int";
     const std::string stringName = "string";
     const std::string boolName = "boolean";

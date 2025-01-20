@@ -74,6 +74,7 @@ public:
     const localVariable& getFuncLocals(const std::string &funName);
     const classVariable &getClassVars(const std::string &className);
     void newString(const std::string & str);
+    void newClassNulls();
     const std::string& getStringName(const std::string &str);
     std::string getFuncType(const std::string &str);
     ListArg* getFuncAr(const std::string &str);
