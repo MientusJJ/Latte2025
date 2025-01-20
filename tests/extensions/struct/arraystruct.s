@@ -39,11 +39,9 @@ main:
   jmp .L3
 .L4:
   movl -8(%ebp), %eax
-  movl (%eax), %eax
   leal 0(%eax), %eax
   movl $10, (%eax)
   movl -8(%ebp), %eax
-  movl (%eax), %eax
   leal 4(%eax), %eax
   movl $11, (%eax)
   decl %ebx
@@ -57,12 +55,10 @@ main:
   jmp .L5
 .L6:
   movl -12(%ebp), %eax
-  movl (%eax), %eax
   pushl 0(%eax)
   call printInt
   addl $4, %esp
   movl -12(%ebp), %eax
-  movl (%eax), %eax
   pushl 4(%eax)
   call printInt
   addl $4, %esp

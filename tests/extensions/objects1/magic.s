@@ -127,7 +127,6 @@ main:
   jmp .L3
 .L4:
   movl -12(%ebp), %eax
-  movl (%eax), %eax
   pushl 0(%eax)
   call printInt
   addl $4, %esp

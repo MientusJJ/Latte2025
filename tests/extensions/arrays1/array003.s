@@ -54,11 +54,11 @@ main:
   popl %eax
   test %eax, %eax
   jz .L3
-  movl -20(%ebp), %eax
+  leal -20(%ebp), %eax
   movl $-1, (%eax)
   jmp .L4
 .L3:
-  movl -20(%ebp), %eax
+  leal -20(%ebp), %eax
   movl $0, (%eax)
 .L4:
   leal -16(%ebp), %eax
@@ -75,7 +75,6 @@ main:
   jmp .L7
 .L8:
   movl -24(%ebp), %eax
-  movl (%eax), %eax
   test %eax, %eax
   jz .L9
   pushl $1

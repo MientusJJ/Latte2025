@@ -49,8 +49,7 @@ main:
   movl (%ebx), %ebx
   jmp .L5
 .L6:
-  movl -12(%ebp), %eax
-  pushl (%eax)
+  pushl -12(%ebp)
   call printInt
   addl $4, %esp
   decl %ebx

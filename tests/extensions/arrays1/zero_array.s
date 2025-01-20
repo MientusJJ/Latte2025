@@ -26,8 +26,7 @@ main:
   movl (%ebx), %ebx
   jmp .L1
 .L2:
-  movl -8(%ebp), %eax
-  pushl (%eax)
+  pushl -8(%ebp)
   call printInt
   addl $4, %esp
   decl %ebx

@@ -81,7 +81,6 @@ main:
   addl $8, %esp
   pushl %eax
   movl -12(%ebp), %eax
-  movl (%eax), %eax
   popl %ecx
   pushl %eax
   pushl %ecx

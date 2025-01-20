@@ -34,7 +34,6 @@ doubleArray:
   leal 4(%ecx, %eax, 4), %eax
   pushl %eax
   movl -12(%ebp), %eax
-  movl (%eax), %eax
   imull $2, %eax
   popl %ecx
   movl %eax, (%ecx)
@@ -206,8 +205,7 @@ main:
   movl (%ebx), %ebx
   jmp .L15
 .L16:
-  movl -16(%ebp), %eax
-  pushl (%eax)
+  pushl -16(%ebp)
   call printInt
   addl $4, %esp
   decl %ebx
@@ -220,8 +218,7 @@ main:
   movl (%ebx), %ebx
   jmp .L17
 .L18:
-  movl -20(%ebp), %eax
-  pushl (%eax)
+  pushl -20(%ebp)
   call printInt
   addl $4, %esp
   decl %ebx

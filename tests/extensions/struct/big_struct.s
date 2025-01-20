@@ -39,7 +39,6 @@ main:
   jmp .L3
 .L4:
   movl -8(%ebp), %eax
-  movl (%eax), %eax
   leal 96(%eax), %eax
   movl $10, (%eax)
   decl %ebx

@@ -310,8 +310,7 @@ main:
   movl (%ebx), %ebx
   jmp .L28
 .L29:
-  movl -16(%ebp), %eax
-  pushl (%eax)
+  pushl -16(%ebp)
   call printInt
   addl $4, %esp
   decl %ebx

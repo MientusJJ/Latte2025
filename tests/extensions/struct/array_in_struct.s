@@ -41,7 +41,6 @@ main:
   jmp .L3
 .L4:
   movl -12(%ebp), %eax
-  movl (%eax), %eax
   leal 0(%eax), %eax
   pushl %eax
   movl $5, %eax
@@ -54,13 +53,13 @@ main:
   movl %eax, (%ecx)
   pushl %ebx
   movl -12(%ebp), %eax
-  movl (%eax), %eax
   movl 0(%eax), %ebx
   movl %ebx, -16(%ebp)
   movl (%ebx), %ebx
   jmp .L5
 .L6:
-  pushl -16(%ebp)
+  leal -16(%ebp), %eax
+  pushl %eax
   pushl -8(%ebp)
   addl $10, (%esp)
   popl %eax
@@ -91,14 +90,12 @@ main:
 .L8:
   pushl %ebx
   movl -24(%ebp), %eax
-  movl (%eax), %eax
   movl 0(%eax), %ebx
   movl %ebx, -28(%ebp)
   movl (%ebx), %ebx
   jmp .L9
 .L10:
-  movl -28(%ebp), %eax
-  pushl (%eax)
+  pushl -28(%ebp)
   call printInt
   addl $4, %esp
   decl %ebx

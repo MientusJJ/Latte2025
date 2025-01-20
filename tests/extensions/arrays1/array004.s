@@ -22,7 +22,8 @@ main:
   movl (%ebx), %ebx
   jmp .L1
 .L2:
-  pushl -12(%ebp)
+  leal -12(%ebp), %eax
+  pushl %eax
   movl -8(%ebp), %eax
   popl %ecx
   movl %eax, (%ecx)
@@ -45,10 +46,8 @@ main:
   movl (%ebx), %ebx
   jmp .L5
 .L6:
-  movl -16(%ebp), %eax
-  pushl (%eax)
+  pushl -16(%ebp)
   movl -20(%ebp), %eax
-  movl (%eax), %eax
   imull (%esp), %eax
   movl %eax, (%esp)
   call printInt
