@@ -32,7 +32,7 @@ private:
  bool checkSingleLoop(int i, const std::vector<int> &inher,std::vector<bool> &vis, std::vector<bool> &loop);
  std::vector<symbolTab> symbVec;
  std::unordered_map<std::string, int> declMap;
- const std::tuple<std::string,int,bool> &ifSymbolExists( const symbolTab &t,const std::string & str);
+ const std::tuple<std::string,int,bool,bool> &ifSymbolExists( const symbolTab &t,const std::string & str);
 public:
     void lib();
     InformationSaver(InformationSaver & ) = delete;
@@ -76,6 +76,7 @@ public:
     void newString(const std::string & str);
     void newClassNulls();
     const std::string& getStringName(const std::string &str);
+    bool IfExistsClass(const std::string & str);
     std::string getFuncType(const std::string &str);
     ListArg* getFuncAr(const std::string &str);
     std::string getMethodType(const std::string &className, const std::string &name);
@@ -84,10 +85,11 @@ public:
     const std::string& getVarinClassType(const std::string &className, const std::string &name);
     std::string newLabel();
     bool isSymReference(const std::string& str);
+    bool isSymInit(const std::string& str);
     int getSymIndex(const std::string & str);
     const std::string& getSymType(const std::string &str);
     void restart();
-    bool newSym(const std::string & str, const std::string &t, bool ref = false);
+    bool newSym(const std::string & str, const std::string &t,bool init, bool ref = false);
     void BlkEntry();
     void BlkExit();
 };

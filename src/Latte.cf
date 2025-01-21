@@ -10,7 +10,7 @@ ClsDef.    TopDef ::= "class" Ident "{" [ClsFld] "}" ;
 
 InhClsDef. TopDef ::= "class" Ident "extends" Ident "{" [ClsFld] "}" ;
 
-separator nonempty ClsFld "" ;
+separator ClsFld "" ;
 
 separator nonempty TopDef "" ;
 

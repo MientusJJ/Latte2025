@@ -62,7 +62,7 @@ int main(int argc,char ** argv) {
             analys->visitProgram(progInput);
             delete analys;
             InformationSaver::GetInstance().newClassPars();
-            InformationSaver::GetInstance().newClassNulls();
+            InformationSaver::GetInstance().newString("");
             AnalyserSem *analSem = new AnalyserSem;
             analSem->visitProgram(progInput);
             delete analSem;

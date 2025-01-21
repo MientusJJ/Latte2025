@@ -51,6 +51,12 @@ bool InformationSaver::newClass(const std::string & par,const std::string & idx)
     classExistsMap.emplace(idx,false);
     return true;
 }
+bool InformationSaver::IfExistsClass(const std::string & str)
+ {
+
+  return
+      classesMap.contains(str);
+ }
 bool InformationSaver::IfExists(const std::string & str)
 {
     if(classesMap.contains(str) || functionsMap.contains(str))
@@ -433,16 +439,31 @@ std::string InformationSaver::newLabel()
 {
     return ".L" + std::to_string(++_indx);
 }
-const std::tuple<std::string,int,bool>& InformationSaver::ifSymbolExists( const symbolTab &t,const std::string & str)
+const std::tuple<std::string,int,bool,bool>& InformationSaver::ifSymbolExists( const symbolTab &t,const std::string & str)
 {
     if(t.contains(str))
     {
         return t.find(str)->second;
     }
-    static std::tuple<std::string,int,bool> a("",0,false);
+    static std::tuple<std::string,int,bool,bool> a("",0,false,false);
     return a;
 }
 bool InformationSaver::isSymReference(const std::string& str)
+{
+    for (auto it = symbVec.rbegin(); it != symbVec.rend(); ++it)
+    {
+        auto& symbol = ifSymbolExists(*it, str);
+
+        if (!std::get<0>(symbol).empty())
+        {
+            return std::get<3>(symbol);
+        }
+    }
+    std::string s = "Symbol \"" + str +"\" doesn't exists";
+    throw std::invalid_argument(s.c_str());
+
+}
+bool InformationSaver::isSymInit(const std::string& str)
 {
     for (auto it = symbVec.rbegin(); it != symbVec.rend(); ++it)
     {
@@ -491,7 +512,7 @@ void InformationSaver::restart()
     symbVec.clear();
     declMap.clear();
 }
-bool InformationSaver::newSym(const std::string & str, const std::string &t, bool ref)
+bool InformationSaver::newSym(const std::string & str, const std::string &t,bool init, bool ref)
 {
 
     if(std::get<0>(ifSymbolExists(symbVec.back(),str)).empty())
@@ -506,7 +527,7 @@ bool InformationSaver::newSym(const std::string & str, const std::string &t, boo
             declMap.insert(std::make_pair(str,1));
             indx++;
         }
-        symbVec.back().emplace(std::make_pair(str,std::make_tuple(t,indx,ref)));
+        symbVec.back().emplace(std::make_pair(str,std::make_tuple(t,indx,init,ref)));
         return true;
     }
     return false;

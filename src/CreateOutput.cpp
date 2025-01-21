@@ -4,7 +4,9 @@
 
 #include "CreateOutput.h"
 
-
+#include <iostream>
+#include <string>
+using namespace std;
 
 
 void CreateOutput::visitProgram(Program *t)
@@ -347,8 +349,16 @@ void CreateOutput::visitSExp(SExp *p)
 
 void CreateOutput::visitNoInit(NoInit *p)
 {
-   FileSaver::GetInstance().OneLine("  movl $0, " + std::to_string(
+  if(p->type_ != Helper::stringName)
+  {
+      FileSaver::GetInstance().OneLine("  movl $0, " + std::to_string(
             ControlOffset::GetInstance().getPtr(p->function_name_, p->ident_, p->index_)) +"(\%ebp)\n");
+  }
+  else
+  {
+      FileSaver::GetInstance().OneLine("   movl $loc_str_val$0, " + std::to_string(
+              ControlOffset::GetInstance().getPtr(p->function_name_, p->ident_, p->index_)) +"(\%ebp)\n");
+  }
 
 }
 
@@ -761,6 +771,21 @@ void CreateOutput::visitEArrSimpleNew(EArrSimpleNew *p)
       FileSaver::GetInstance().OneLine("  popl \%ecx\n");
       FileSaver::GetInstance().OneLine("  movl \%ecx, (\%eax)\n");
       FileSaver::GetInstance().OneLine("  pushl \%eax\n");
+    }
+    if(p->type_ == (Helper::stringName + Helper::tableName))
+    {
+        auto whileifLabel = InformationSaver::GetInstance().newLabel();
+        auto whilebodyLabel = InformationSaver::GetInstance().newLabel();
+        FileSaver::GetInstance().OneLine("  movl (%eax), %ecx\n");
+        FileSaver::GetInstance().OneLine("  leal 4(%eax), %edx\n");
+        FileSaver::GetInstance().OneLine(whileifLabel + ":\n");
+        FileSaver::GetInstance().OneLine("  cmpl $0, %ecx\n");
+        FileSaver::GetInstance().OneLine("  jle " + whilebodyLabel + "\n");
+        FileSaver::GetInstance().OneLine("  movl $loc_str_val$0, (%edx)\n");
+        FileSaver::GetInstance().OneLine("  addl $4, %edx\n");
+        FileSaver::GetInstance().OneLine("  decl %ecx\n");
+        FileSaver::GetInstance().OneLine("  jmp " + whileifLabel + "\n");
+        FileSaver::GetInstance().OneLine(whilebodyLabel + ":\n");
     }
 
 }

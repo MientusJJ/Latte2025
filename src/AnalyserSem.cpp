@@ -118,7 +118,7 @@ void AnalyserSem::visitAr(Ar *p)
       FileSaver::GetInstance().addError(str,p->type_->line);
   }
 
-  if(!InformationSaver::GetInstance().newSym(p->ident_,p->type_->get()))
+  if(!InformationSaver::GetInstance().newSym(p->ident_,p->type_->get(),true))
   {
       std::string str = p->ident_ + " previously declared.";
       FileSaver::GetInstance().addError(str,p->line);
@@ -187,11 +187,15 @@ void AnalyserSem::visitAss(Ass *p)
   p->expr_1->accept(this);
   p->expr_2->accept(this);
 
-  if(p->expr_2->type_ != p->expr_1->type_ && (!InformationSaver::GetInstance().classPar(p->expr_1->type_,p->expr_2->type_) && !InformationSaver::GetInstance().classPar(p->expr_1->type_,Helper::nullName)) && p->expr_1->is_lvalue_)
+  if(p->expr_2->type_ != p->expr_1->type_ && !InformationSaver::GetInstance().classPar(p->expr_1->type_,p->expr_2->type_) && p->expr_1->is_lvalue_)
   {
-      std::string str = "Type: " + (p->expr_1->type_.size() ?  p->expr_1->type_ : "undefined" ) + " doesn't match type: " +  p->expr_2->type_ ;
+       if(!(InformationSaver::GetInstance().IfExistsClass(p->expr_1->type_) && p->expr_2->type_ == Helper::nullName))
+     {
+     	        std::string str = "Type: " + (p->expr_1->type_.size() ?  p->expr_1->type_ : "undefined" ) + " doesn't match type: " +  p->expr_2->type_ ;
       FileSaver::GetInstance().addError(str,p->expr_1->line);
   }
+     }
+
   if (!p->expr_1->is_lvalue_)
   {
       std::string str = "Assignment can be done only for lvalues!";
@@ -378,7 +382,7 @@ void AnalyserSem::visitForEach(ForEach *p)
         std::string str = "Can't declare variable named 'self'";
         FileSaver::GetInstance().addError(str,p->line );
   }
-  else if(!InformationSaver::GetInstance().newSym(p->ident_,p->type_->get(),true))
+  else if(!InformationSaver::GetInstance().newSym(p->ident_,p->type_->get(),true,true))
   {
       std::string str =  p->ident_ + " previously declared.";;
       FileSaver::GetInstance().addError(str,p->line );
@@ -437,7 +441,7 @@ void AnalyserSem::visitNoInit(NoInit *p)
         std::string str = "Can't declare variable named 'self'";
         FileSaver::GetInstance().addError(str,p->line );
     }
-    if(!InformationSaver::GetInstance().newSym(p->ident_,p->type_))
+    if(!InformationSaver::GetInstance().newSym(p->ident_,p->type_,false))
     {
         std::string str =  p->ident_ + " previously declared.";;
         FileSaver::GetInstance().addError(str,p->line );
@@ -478,13 +482,19 @@ void AnalyserSem::visitInit(Init *p)
       std::string str = "Can't declare variable named 'self'";
       FileSaver::GetInstance().addError(str,p->line );
   }
-   if(p->expr_->type_ != p->type_ && !InformationSaver::GetInstance().classPar(p->type_,p->expr_->type_) && !InformationSaver::GetInstance().classPar(p->type_,Helper::nullName))
+   if(p->expr_->type_ != p->type_ && !InformationSaver::GetInstance().classPar(p->type_,p->expr_->type_))
   {
-      std::string str = "Declaration and Assignment types do not match.";
-      FileSaver::GetInstance().addError(str,p->expr_->line );
+
+     if(!(InformationSaver::GetInstance().IfExistsClass(p->type_) && p->expr_->type_ == Helper::nullName))
+     {
+     	cout << p->expr_->type_;
+       std::string str = "Declaration and Assignment types do not match.";
+      	FileSaver::GetInstance().addError(str,p->expr_->line );
+     }
+
   }
 
-   if(!InformationSaver::GetInstance().newSym(p->ident_,p->type_))
+   if(!InformationSaver::GetInstance().newSym(p->ident_,p->type_,true))
   {
       std::string str =  p->ident_ + " previously declared.";;
       FileSaver::GetInstance().addError(str,p->line );

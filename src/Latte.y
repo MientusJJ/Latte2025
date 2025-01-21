@@ -180,8 +180,8 @@ TopDef : Type _IDENT_ _SYMB_0 ListArg _SYMB_1 Block {  std::reverse($4->begin(),
   | _SYMB_29 _IDENT_ _SYMB_2 ListClsFld _SYMB_3 {  std::reverse($4->begin(),$4->end()) ;$$ = new ClsDef($2, $4);  }
   | _SYMB_29 _IDENT_ _SYMB_31 _IDENT_ _SYMB_2 ListClsFld _SYMB_3 {  std::reverse($6->begin(),$6->end()) ;$$ = new InhClsDef($2, $4, $6);  }
 ;
-ListClsFld : ClsFld {  $$ = new ListClsFld() ; $$->push_back($1);  }
-  | ClsFld ListClsFld {  $2->push_back($1) ; $$ = $2 ;  }
+ListClsFld : {  $$ = new ListClsFld();  }
+ | ListClsFld ClsFld {  $1->push_back($2) ; $$ = $1 ;  }
 ;
 ListTopDef : TopDef {  $$ = new ListTopDef() ; $$->push_back($1);  }
   | TopDef ListTopDef {  $2->push_back($1) ; $$ = $2 ;  }

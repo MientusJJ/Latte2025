@@ -16,7 +16,7 @@ using classType = std::tuple<std::string, classVariable , classFunctions>;
 using functionVariable = std::tuple<Type*, ListArg*, localVariable>;
 using localVariabletoOff = std::map<std::pair<std::string, int>, int>;
 using classVariabletoOff= std::unordered_map<std::string, int>;
-using symbolTab = std::unordered_map<std::string, std::tuple<std::string, int, bool>>;
+using symbolTab = std::unordered_map<std::string, std::tuple<std::string, int,bool, bool>>;
 
 
 namespace Helper {

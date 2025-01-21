@@ -301,9 +301,10 @@ public:
 class Expr : public Visitable
 {
 public:
-    Expr() : ident_(""),is_lvalue_(false), is_always_false_(false), is_always_true_(false),
+    Expr() : init_(false),ident_(""),is_lvalue_(false), is_always_false_(false), is_always_true_(false),
              has_value_(false), is_null_(false) {}
   virtual Expr *clone() const = 0;
+    bool init_;
     Ident ident_;
     std::string type_;
     bool is_lvalue_;
