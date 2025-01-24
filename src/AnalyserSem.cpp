@@ -315,18 +315,22 @@ void AnalyserSem::visitCondElse(CondElse *p)
     }
     if(!p->expr_->is_always_false_ && !p->expr_->is_always_true_)
     {
+        InformationSaver::GetInstance().BlkEntry();
         auto par = ControlFlow::getInstance().getCurrBlk();
         ControlFlow::getInstance().newBlk();
         auto ifBlk = ControlFlow::getInstance().getCurrBlk();
         cout << "par,ifBlok: " <<  par << " " << ifBlk << endl;
         ControlFlow::getInstance().addNewNode(par,ifBlk);
         p->stmt_1->accept(this);
+        InformationSaver::GetInstance().BlkExit();
+        InformationSaver::GetInstance().BlkEntry();
         auto ifPar = ControlFlow::getInstance().getCurrBlk();
         ControlFlow::getInstance().newBlk();
         auto elseBlock = ControlFlow::getInstance().getCurrBlk();
         ControlFlow::getInstance().addNewNode(par,elseBlock);
         cout << "par,elseBlock: " <<  par << " " << ifBlk << endl;
         p->stmt_2->accept(this);
+        InformationSaver::GetInstance().BlkExit();
         auto elsePar = ControlFlow::getInstance().getCurrBlk();
         ControlFlow::getInstance().newVirtBlock(elsePar,ifPar);
         auto ifAfter = ControlFlow::getInstance().getCurrBlk();
@@ -777,7 +781,7 @@ void AnalyserSem::visitEApp(EApp *p)
         std::string str = p->ident_ + " function needs " + std::to_string(ar->size() ) + " arguments, but it gets " + std::to_string(p->listexpr_->size());
         FileSaver::GetInstance().addError(str,p->listexpr_->line );
     }
-    for(int i = 0; i < min(ar->size(),p->listexpr_->size()); i++)
+    for(int i = 0; i < p->listexpr_->size(); i++)
     {
 
         if(p->listexpr_->at(i)->type_ != ar->at(i)->getType() && !InformationSaver::GetInstance().classPar(ar->at(i)->getType(),p->listexpr_->at(i)->type_))

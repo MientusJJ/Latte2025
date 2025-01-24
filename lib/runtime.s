@@ -4,7 +4,7 @@ format: .string "%d\n"
 scanf_int: .string "%d%*c"
 scanf_str: .string "%255[^\n]%*c"
 error_str: .string "runtime error"
-
+input_buffer: .space 128
 
 .text
 .globl printString
@@ -37,10 +37,10 @@ error:
   movl %esp, %ebp
   pushl $error_str
   call printString
-  add $4, %esp
+  addl $4, %esp
   pushl stdout
   call fflush
-  add $4, %esp
+  addl $4, %esp
   movl $1, %eax
   movl $0, %ebx
   int $0x80
@@ -49,13 +49,13 @@ readString:
 	pushl	%ebp
 	movl	%esp, %ebp
 	subl $8, %esp
-	movl $120, -4(%ebp)
+	movl $128, -4(%ebp)
 	pushl -4(%ebp)
 	call malloc
-	movl %eax, -8(%ebp)
 	addl $4, %esp
+	movl %eax, -8(%ebp)
 	pushl -8(%ebp)
-	pushl $scanf_str
+	pushl $format_string
 	call scanf
 	addl $8, %esp
 	movl -8(%ebp), %eax
@@ -113,3 +113,4 @@ _Latte.addStrings:
 	popl	%esi
 	popl	%ebp
 	ret
+
