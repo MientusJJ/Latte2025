@@ -729,11 +729,8 @@ void CreateOutput::visitEArrNew(EArrNew *p)
     }
   FileSaver::GetInstance().OneLine("  jmp " + whileifLabel + "\n");
   FileSaver::GetInstance().OneLine(whilebodyLabel + ":\n");
-  FileSaver::GetInstance().OneLine("  pushl $" + std::to_string(classSize) + "\n");
-  FileSaver::GetInstance().OneLine("  call malloc\n");
-  FileSaver::GetInstance().OneLine("  addl $4, \%esp\n");
   FileSaver::GetInstance().OneLine("  popl \%edx\n");
-  FileSaver::GetInstance().OneLine("  movl \%eax, (\%edx, \%ebx, 4)\n");
+  FileSaver::GetInstance().OneLine("  movl $0, (\%edx, \%ebx, 4)\n");
   FileSaver::GetInstance().OneLine("  pushl \%edx\n");
   FileSaver::GetInstance().OneLine("  decl \%ebx\n");
   FileSaver::GetInstance().OneLine(whileifLabel + ":\n");

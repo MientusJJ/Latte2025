@@ -186,8 +186,19 @@ void AnalyserSem::visitAss(Ass *p)
   cout << "Tutaj15" << endl;
   p->expr_1->accept(this);
   p->expr_2->accept(this);
-
-  if(p->expr_2->type_ != p->expr_1->type_ && !InformationSaver::GetInstance().classPar(p->expr_1->type_,p->expr_2->type_) && p->expr_1->is_lvalue_)
+  std::string type_1 = p->expr_1->type_, type_2 = p->expr_2->type_;
+  bool t1 = false, t2 = false;
+    if(p->expr_1->type_.length() > 2 && p->expr_1->type_.substr(p->expr_1->type_.length() - 2) == Helper::tableName)
+    {
+        type_1 = p->expr_1->type_.substr(0, p->expr_1->type_.length() - 2);
+        t1 = true;
+    }
+    if(p->expr_2->type_.length() > 2 &&p->expr_2->type_.substr(p->expr_2->type_.length() - 2) == Helper::tableName)
+    {
+        type_2 =p->expr_2->type_.substr(0, p->expr_2->type_.length() - 2);
+        t2 = true;
+    }
+  if(((type_1 != type_2 && !InformationSaver::GetInstance().classPar(type_1,type_2)) || t1 != t2 )&& p->expr_1->is_lvalue_)
   {
        if(!(InformationSaver::GetInstance().IfExistsClass(p->expr_1->type_) && p->expr_2->type_ == Helper::nullName))
      {
@@ -486,15 +497,25 @@ void AnalyserSem::visitInit(Init *p)
       std::string str = "Can't declare variable named 'self'";
       FileSaver::GetInstance().addError(str,p->line );
   }
-   if(p->expr_->type_ != p->type_ && !InformationSaver::GetInstance().classPar(p->type_,p->expr_->type_))
+  std::string type_1 = p->expr_->type_, type_2 = p->type_;
+  bool t1 = false,t2= false;
+  if(p->expr_->type_.length() > 2 && p->expr_->type_.substr(p->expr_->type_.length() - 2) == Helper::tableName)
+  {
+    type_1 = p->expr_->type_.substr(0, p->expr_->type_.length() - 2);
+    t1 = true;
+  }
+  if(p->type_.length() > 2 && p->type_.substr(p->type_.length() - 2) == Helper::tableName)
+  {
+      type_2 =p->type_.substr(0, p->type_.length() - 2);
+      t2 = true;
+  }
+  if((type_1 != type_2 && !InformationSaver::GetInstance().classPar(type_2,type_1)) || t1 != t2)
   {
 
-     if(!(InformationSaver::GetInstance().IfExistsClass(p->type_) && p->expr_->type_ == Helper::nullName))
-     {
+
      	cout << p->expr_->type_;
        std::string str = "Declaration and Assignment types do not match.";
       	FileSaver::GetInstance().addError(str,p->expr_->line );
-     }
 
   }
 
@@ -1200,7 +1221,7 @@ void AnalyserSem::visitERel(ERel *p)
       {
           check = true;
       }
-      else if (p->expr_1->type_ == p->expr_2->type_)
+      else if (InformationSaver::GetInstance().classPar(p->expr_1->type_,p->expr_2->type_) || InformationSaver::GetInstance().classPar(p->expr_2->type_,p->expr_1->type_))
         {
         	check = true;
         }
